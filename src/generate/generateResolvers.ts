@@ -1,6 +1,11 @@
-import {Flattened, IOptions} from '../types';
+import {Flattened, IOptions, IRelationships, ISelectors} from '../types';
 
-export const generateResolvers = (options: IOptions, flattened: Flattened) => {
+export const generateResolvers = (
+  options: IOptions,
+  flattened: Flattened,
+  selectors: ISelectors,
+  relationships: IRelationships,
+) => {
   if (!options.generateApi) {
     return '';
   }
@@ -11,6 +16,40 @@ const getArguments = <I> (a, b) : I => {
 };
 
 export const resolvers = {
+
+    ${Object.keys(flattened).reduce((prev, current) => {
+      return `${prev}
+      ${current}: {
+        ${Object.keys(relationships[current])
+          .map((item) => {
+            const {type, objectType, keys} = relationships[current][item];
+
+            return `   ${item}: async (ctx) => {
+                ${
+                  type === 'belongsTo' || type === 'hasOne'
+                    ? `return await ${objectType}.find({${Object.keys(
+                        keys,
+                      ).reduce((prev, i) => {
+                        return `${prev} ${[
+                          selectors[objectType].fields[i],
+                        ]}: ctx.${keys[i]},`;
+                      }, '')}})`
+                    : type === 'hasMany'
+                    ? `const result = await ${objectType}.query({${Object.keys(
+                        keys,
+                      ).reduce((prev, i) => {
+                        return `${prev} ${[
+                          selectors[objectType].fields[i],
+                        ]}: ctx.${keys[i]},`;
+                      }, '')}});
+                      return result.items;`
+                    : ''
+                }
+              },`;
+          })
+          .join('\n')}
+      },`;
+    }, ``)}
     Query: {
         ${Object.keys(flattened).reduce((prev, current) => {
           return `${prev}

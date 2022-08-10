@@ -164,6 +164,19 @@ const getArguments = <I> (a, b) : I => {
 };
 
 export const resolvers = {
+
+    
+      Address: {
+           person: async (ctx) => {
+                return await Person.find({ id: ctx.personId,})
+              },
+      },
+      Person: {
+           addresses: async (ctx) => {
+                const result = await Address.query({ personId: ctx.id,});
+                      return result.items;
+              },
+      },
     Query: {
         
         getAddress: async (a, b) => {

@@ -47,7 +47,12 @@ ${schemaString}`;
     modelSettings,
     relationships,
   );
-  const generatedResolvers = generateResolvers(options, flattened);
+  const generatedResolvers = generateResolvers(
+    options,
+    flattened,
+    selectors,
+    relationships,
+  );
   const generatedSchema = generateSchema(
     combinedSchema,
     options,

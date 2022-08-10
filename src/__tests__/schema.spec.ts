@@ -15,6 +15,40 @@ const CREATE_PERSON_QUERY = gql`
   }
 `;
 
+const CREATE_ADDRESS_QUERY = gql`
+  mutation CreateAddress($input: CreateAddressInput!) {
+    createAddress(input: $input) {
+      id
+    }
+  }
+`;
+
+const GET_PERSON_WITH_ADDRESSES_QUERY = gql`
+  query GetPerson($input: GetPersonInput!) {
+    getPerson(input: $input) {
+      id
+      addresses {
+        id
+        city
+        state
+      }
+    }
+  }
+`;
+
+const GET_ADDRESS_WITH_PERSON_QUERY = gql`
+  query GetAddress($input: GetAddressInput!) {
+    getAddress(input: $input) {
+      id
+      person {
+        id
+        firstName
+        lastName
+      }
+    }
+  }
+`;
+
 const QUERY_PERSON_QUERY = gql`
   query QueryPersonRecords($input: QueryPersonRecordsInput!) {
     queryPersonRecords(input: $input) {
@@ -168,5 +202,46 @@ describe('GraphQL Schema', () => {
     });
 
     expect(res2.data?.queryPersonRecords.items.length).toBe(1);
+  });
+
+  it('Should query with relationships', async () => {
+    const testServer = await createTestServer();
+    const res = await createPerson(testServer);
+
+    const res2 = await testServer.executeOperation({
+      query: CREATE_ADDRESS_QUERY,
+      variables: {
+        input: {
+          personId: res.data?.createPerson.id,
+          street: '222 Main St',
+          city: 'Anytown',
+          state: 'CA',
+          zip: '12345',
+        },
+      },
+    });
+
+    const res3 = await testServer.executeOperation({
+      query: GET_PERSON_WITH_ADDRESSES_QUERY,
+      variables: {
+        input: {
+          id: res.data?.createPerson.id,
+        },
+      },
+    });
+
+    expect(res3.data?.getPerson.addresses[0].state).toBe('CA');
+
+    const res4 = await testServer.executeOperation({
+      query: GET_ADDRESS_WITH_PERSON_QUERY,
+      variables: {
+        input: {
+          id: res2.data?.createAddress.id,
+          personId: res.data?.createPerson.id,
+        },
+      },
+    });
+
+    expect(res4.data?.getAddress.person.firstName).toBe('John');
   });
 });
