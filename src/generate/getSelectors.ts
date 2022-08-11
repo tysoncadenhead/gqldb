@@ -14,16 +14,22 @@ export const getSelectors = (models: IModels): ISelectors => {
           const isSk = !!(model._fields[key].astNode.directives || []).find(
             (directive) => directive.name.value === 'sk',
           );
+          const isKey = !!(model._fields[key].astNode.directives || []).find(
+            (directive) => directive.name.value === 'key',
+          );
 
-          return isPk || isSk;
+          return isPk || isSk || isKey;
         })
         .reduce(
           (prev, key) => {
             const field = model._fields[key];
             const directive = field.astNode.directives.find(
               (directive) =>
-                directive.name.value === 'pk' || directive.name.value === 'sk',
+                directive.name.value === 'pk' ||
+                directive.name.value === 'sk' ||
+                directive.name.value === 'key',
             );
+
             const keyArg = directive.arguments.find(
               (arg) => arg.name.value === 'key',
             );
@@ -43,7 +49,10 @@ export const getSelectors = (models: IModels): ISelectors => {
                   value: keyValue,
                 },
               ],
-              fields: [...prev.fields, ...keyValues],
+              fields:
+                directive.name.value === 'key'
+                  ? prev.fields
+                  : [...prev.fields, ...keyValues],
             };
           },
           {

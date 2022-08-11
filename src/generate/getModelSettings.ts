@@ -11,6 +11,17 @@ export const getModelSettings = (
     const tableName =
       directive.arguments.find((arg) => arg.name.value === 'table')?.value
         ?.value || options?.tableName;
+    const indexes = (
+      directive.arguments.find((arg) => arg.name.value === 'indexes')?.value
+        ?.values || []
+    ).map((index) =>
+      index.fields.reduce((prev, current) => {
+        return {
+          ...prev,
+          [current.name.value]: current.value.value,
+        };
+      }, {}),
+    );
 
     if (!tableName) {
       throw new Error(`No tableName found for ${current}`);
@@ -20,6 +31,7 @@ export const getModelSettings = (
       ...prev,
       [current]: {
         tableName,
+        indexes,
       },
     };
   }, {} as IModelSettings);

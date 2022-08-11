@@ -2,10 +2,10 @@ import {setAdapter} from '..';
 import {memoryAdapter} from '../adapters/memoryAdapter';
 import {setup, OUTPUT_PATH} from '../testUtils/setup';
 
-describe.skip('Memory Adapter', () => {
-  beforeAll(() => {
+describe('Memory Adapter', () => {
+  beforeAll(async () => {
     setAdapter(memoryAdapter);
-    setup();
+    await setup();
   });
 
   afterAll(() => {
@@ -97,5 +97,21 @@ describe.skip('Memory Adapter', () => {
 
     expect(addressResults2.items.length).toBe(1);
     expect(addressResults2.items[0].street).toBe('222 Main St');
+  });
+
+  it('Should query by an index', async () => {
+    const {Address} = await import(OUTPUT_PATH);
+
+    await Address.create({
+      personId: 'person1',
+      street: '123 Main St',
+      city: 'Anytown',
+      state: 'CA',
+      zip: '12345',
+    });
+
+    const addressResults = await Address.queryByState({state: 'CA', limit: 1});
+
+    expect(addressResults.items.length).toBe(1);
   });
 });

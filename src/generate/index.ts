@@ -1,4 +1,4 @@
-import {buildSchema} from 'graphql';
+import {buildSchema, printSchema} from 'graphql';
 import {flatten} from './flatten';
 import {generateTypescript} from './generateTypescript';
 import {writeGeneratedScript} from './writeGeneratedScript';
@@ -10,8 +10,11 @@ import {getRelationships} from './getRelationships';
 import {generateResolvers} from './generateResolvers';
 import {generateSchema} from './generateSchema';
 import {writeGeneratedSchema} from './writeGeneratedSchema';
+import {ESLint} from 'eslint';
 
-export const getDb = (schemaString: string, options?: IOptions) => {
+const eslint = new ESLint();
+
+export const generate = async (schemaString: string, options?: IOptions) => {
   const combinedSchema = `${customDirectives}
 ${schemaString}`;
   const schema = buildSchema(combinedSchema);
@@ -52,18 +55,25 @@ ${schemaString}`;
     flattened,
     selectors,
     relationships,
+    modelSettings,
   );
   const generatedSchema = generateSchema(
     combinedSchema,
     options,
     flattened,
     selectors,
+    modelSettings,
   );
 
-  writeGeneratedScript(`${generated}${generatedResolvers}`, options);
+  writeGeneratedScript(
+    `${generated}${generatedResolvers}`
+      .replace(/'/g, '"')
+      .replace(/\n\n*/g, '\r\n'),
+    options,
+  );
 
   if (options.generateApi) {
-    writeGeneratedSchema(generatedSchema, options);
+    writeGeneratedSchema(printSchema(buildSchema(generatedSchema)), options);
   }
 
   return generated;

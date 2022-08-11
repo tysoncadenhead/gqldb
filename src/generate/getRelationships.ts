@@ -1,19 +1,7 @@
 import {IModels, IRelationships} from '../types';
 import {relationshipTypes} from './constants';
-
-const getKeyValue = (keyName: string, directive: any) => {
-  const keyArg = directive.arguments.find((arg) => arg.name.value === keyName);
-  return keyArg.value.value;
-};
-
-const getKeyArgs = (keyName: string, directive: any) => {
-  const keyValue = getKeyValue(keyName, directive);
-  const keyValues = keyValue
-    .split('{{')
-    .filter((key) => key.includes('}}'))
-    .map((key) => key.split('}}')[0]);
-  return keyValues;
-};
+import {getKeyArgs} from './utils/getKeyArgs';
+import {getKeyValue} from './utils/getKeyValue';
 
 export const getRelationships = (models: IModels): IRelationships => {
   return Object.keys(models).reduce((prev, current) => {

@@ -4,9 +4,9 @@ import {memoryAdapter} from '../adapters/memoryAdapter';
 import {setup, OUTPUT_PATH} from '../testUtils/setup';
 
 describe.skip('DynamoDB Adapter', () => {
-  beforeAll(() => {
+  beforeAll(async () => {
     setAdapter(dynamodbAdapter);
-    setup();
+    await setup();
   });
 
   afterAll(async () => {
@@ -114,5 +114,21 @@ describe.skip('DynamoDB Adapter', () => {
     });
 
     expect(addressResults2.items.length).toBe(1);
+  });
+
+  it('Should query by an index', async () => {
+    const {Address} = await import(OUTPUT_PATH);
+
+    await Address.create({
+      personId: 'person1',
+      street: '123 Main St',
+      city: 'Anytown',
+      state: 'CA',
+      zip: '12345',
+    });
+
+    const addressResults = await Address.queryByState({state: 'CA', limit: 1});
+
+    expect(addressResults.items.length).toBe(1);
   });
 });

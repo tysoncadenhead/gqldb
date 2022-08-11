@@ -11,7 +11,7 @@ export interface Flattened {
   [key: string]: FlattenedField;
 }
 
-interface IKey {
+export interface IKey {
   type: string;
   key: string;
   value: string;
@@ -32,9 +32,17 @@ export interface IOptions {
   outputSchemaPath?: string;
 }
 
+export interface IIndex {
+  name: string;
+  index: string;
+  pk: string;
+  sk: string;
+}
+
 export interface IModelSettings {
   [key: string]: {
     tableName: string;
+    indexes: IIndex[];
   };
 }
 
@@ -42,6 +50,7 @@ export interface IAdapterOptions {
   tableName: string;
   model: string;
   keys: IKey[];
+  indexes: IIndex[];
 }
 
 interface IRelationship {

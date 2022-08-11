@@ -1,10 +1,12 @@
-import {Flattened, IOptions, ISelectors} from '../types';
+import {Flattened, IOptions, ISelectors, IModelSettings} from '../types';
+import {getIndexArgs} from './utils/getIndexArgs';
 
 export const generateSchema = (
   schemaString: string,
   options: IOptions,
   flattened: Flattened,
   selectors: ISelectors,
+  modelSettings: IModelSettings,
 ) => {
   if (!options.generateApi) {
     return '';
@@ -27,6 +29,10 @@ ${Object.keys(model)
   .filter((item) => {
     return selectors[current].fields.includes(model[item].key);
   })
+  .filter((item) => {
+    const {type} = model[item];
+    return type !== 'key';
+  })
   .map((item) => {
     const {key, originalType, required} = model[item];
     return `   ${key}: ${originalType}${required ? '!' : ''}`;
@@ -45,6 +51,26 @@ ${Object.keys(model)
   })
   .join('\n')}
 }
+
+${modelSettings[current].indexes
+  .map((index) => {
+    const args = getIndexArgs(current, index, selectors);
+
+    return `input Query${current}Records${index.name}Input {
+   limit: Int
+   startKey: String
+${Object.keys(model)
+  .filter((item) => {
+    return args.includes(model[item].key);
+  })
+  .map((item) => {
+    const {key, originalType} = model[item];
+    return `   ${key}: ${originalType}`;
+  })
+  .join('\n')}
+}`;
+  })
+  .join(',\n')}
 
 input Query${current}RecordsInput {
    limit: Int
@@ -99,7 +125,13 @@ type Query {
 ${Object.keys(flattened).reduce((prev, current) => {
   return `${prev}
     get${current} (input: Get${current}Input!) : ${current}!
-    query${current}Records (input: Query${current}RecordsInput!): Paginated${current}!`;
+    query${current}Records (input: Query${current}RecordsInput!): Paginated${current}!
+    ${modelSettings[current].indexes
+      .map(
+        (index) =>
+          `query${current}Records${index.name} (input: Query${current}Records${index.name}Input!): Paginated${current}!`,
+      )
+      .join('\n')}`;
 }, ``)}
 }
 

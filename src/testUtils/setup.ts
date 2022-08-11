@@ -1,9 +1,14 @@
-import {getDb, gql} from '..';
+import {generate, gql} from '..';
 
 const schema = gql`
-  type Address @model(table: "mindful-ex-tyson") {
+  type Address
+    @model(
+      table: "mindful-ex-tyson"
+      indexes: [{name: "ByState", index: "gsi1index", pk: "pk", sk: "gsi1"}]
+    ) {
     pk: String! @pk(key: "Address")
     sk: String! @sk(key: "personId:{{personId}}|id:{{id}}")
+    gsi1: String! @key(key: "state:{{state}}|city:{{city}}|id:{{id}}")
     id: ID! @generated
     personId: ID!
     street: String!
@@ -24,8 +29,8 @@ const schema = gql`
   }
 `;
 
-export const setup = () => {
-  getDb(schema, {
+export const setup = async () => {
+  await generate(schema, {
     generateApi: true,
     outputScriptPath: './src/.gqldb/index.ts',
     outputSchemaPath: './src/.gqldb/schema.graphql',

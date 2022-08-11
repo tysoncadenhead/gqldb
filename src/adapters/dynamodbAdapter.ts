@@ -2,7 +2,7 @@ import {AdapterInterface} from './adapterInterface';
 import {IAdapterOptions} from '../types';
 import Mustache from 'mustache';
 import {DynamoDB} from 'aws-sdk';
-import {generateDynamicFields} from './helpers';
+import {generateDynamicFields, isMainKey, buildPartialKey} from './helpers';
 
 const dynamodb = new DynamoDB();
 
@@ -23,7 +23,7 @@ export const dynamodbAdapter: AdapterInterface = {
     const record = await dynamodb
       .getItem({
         Key: DynamoDB.Converter.marshall(
-          options.keys.reduce((prev, current) => {
+          options.keys.filter(isMainKey).reduce((prev, current) => {
             return {
               ...prev,
               [current.key]: Mustache.render(current.value, input),
@@ -56,7 +56,7 @@ export const dynamodbAdapter: AdapterInterface = {
   },
   delete: async <A, B>(options: IAdapterOptions, input: A): Promise<B> => {
     const lookupKey = DynamoDB.Converter.marshall(
-      options.keys.reduce((prev, current) => {
+      options.keys.filter(isMainKey).reduce((prev, current) => {
         return {
           ...prev,
           [current.key]: Mustache.render(current.value, input),
@@ -87,16 +87,18 @@ export const dynamodbAdapter: AdapterInterface = {
     return item as any as B;
   },
   find: async <A, B>(options: IAdapterOptions, input: A): Promise<B> => {
+    const key = DynamoDB.Converter.marshall(
+      options.keys.filter(isMainKey).reduce((prev, current) => {
+        return {
+          ...prev,
+          [current.key]: Mustache.render(current.value, input),
+        };
+      }, {}),
+    );
+
     const record = await dynamodb
       .getItem({
-        Key: DynamoDB.Converter.marshall(
-          options.keys.reduce((prev, current) => {
-            return {
-              ...prev,
-              [current.key]: Mustache.render(current.value, input),
-            };
-          }, {}),
-        ),
+        Key: key,
         TableName: options.tableName,
       })
       .promise();
@@ -116,20 +118,48 @@ export const dynamodbAdapter: AdapterInterface = {
     const expressionAttributeValues = {
       [`:${pk.key}`]: {S: Mustache.render(pk.value, input)},
       [`:${sk.key}`]: {
-        S: Mustache.render(sk.value, {
-          ...Object.keys(sk.fields).reduce((prev, current) => {
-            return {
-              ...prev,
-              [sk.fields[current]]: '__NULL__',
-            };
-          }, {}),
-          ...input,
-        }).split('__NULL__')[0],
+        S: buildPartialKey(sk, input),
       },
     };
 
     const result = await dynamodb
       .query({
+        TableName: options.tableName,
+        Limit: limit,
+        KeyConditionExpression: `${pk.key} = :${pk.key} AND begins_with(${sk.key}, :${sk.key})`,
+        ExpressionAttributeValues: expressionAttributeValues,
+      })
+      .promise();
+
+    return {
+      items: result.Items.map((record) =>
+        DynamoDB.Converter.unmarshall(record),
+      ),
+      limit,
+      lastKey: result.LastEvaluatedKey,
+    } as any as B;
+  },
+  queryByIndex: async <A, B>(
+    options: IAdapterOptions,
+    indexName: string,
+    input: A,
+  ): Promise<B> => {
+    const index = options.indexes.find((index) => index.name === indexName);
+    const pk = options.keys.find((key) => index.pk === key.key);
+    const sk = options.keys.find((key) => index.sk === key.key);
+    const anyInput = input as any;
+    const limit = anyInput?.limit ? anyInput?.limit : 100;
+
+    const expressionAttributeValues = {
+      [`:${pk.key}`]: {S: Mustache.render(pk.value, input)},
+      [`:${sk.key}`]: {
+        S: buildPartialKey(sk, input),
+      },
+    };
+
+    const result = await dynamodb
+      .query({
+        IndexName: index.index,
         TableName: options.tableName,
         Limit: limit,
         KeyConditionExpression: `${pk.key} = :${pk.key} AND begins_with(${sk.key}, :${sk.key})`,

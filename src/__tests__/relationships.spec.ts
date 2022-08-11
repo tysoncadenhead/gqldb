@@ -2,10 +2,10 @@ import {setAdapter} from '..';
 import {memoryAdapter} from '../adapters/memoryAdapter';
 import {setup, OUTPUT_PATH} from '../testUtils/setup';
 
-describe.skip('Relationships', () => {
-  beforeAll(() => {
+describe('Relationships', () => {
+  beforeAll(async () => {
     setAdapter(memoryAdapter);
-    setup();
+    await setup();
   });
 
   afterAll(() => {

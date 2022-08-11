@@ -6,4 +6,9 @@ export interface AdapterInterface {
   delete<A, B>(adapterOption: IAdapterOptions, input: A): Promise<B>;
   find<A, B>(adapterOption: IAdapterOptions, input: A): Promise<B>;
   query<A, B>(adapterOption: IAdapterOptions, input: A): Promise<B>;
+  queryByIndex<A, B>(
+    adapterOption: IAdapterOptions,
+    index: string,
+    input: A,
+  ): Promise<B>;
 }

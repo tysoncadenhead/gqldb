@@ -118,9 +118,9 @@ const createPerson = async (testServer) => {
 };
 
 describe('GraphQL Schema', () => {
-  beforeAll(() => {
+  beforeAll(async () => {
     setAdapter(memoryAdapter);
-    setup();
+    await setup();
   });
 
   afterAll(() => {
