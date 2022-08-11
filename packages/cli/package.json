@@ -1,0 +1,22 @@
+{
+    "name": "@graphqldb/cli",
+    "version": "1.0.0",
+    "description": "The CLI for graphqldb",
+    "main": "lib/index.js",
+    "scripts": {
+        "build": "tsc",
+        "test": "echo '...'"
+    },
+    "author": "Tyson Cadenhead",
+    "license": "MIT",
+    "bin": {
+        "gqldb": "bin/gqldb"
+    },
+    "dependencies": {
+        "@graphqldb/types": "*",
+        "graphql": "^16.5.0"
+    },
+    "devDependencies": {
+        "typescript": "^4.7.4"
+    }
+}

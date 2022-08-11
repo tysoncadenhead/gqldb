@@ -1,46 +1,18 @@
 {
-  "name": "gqldb",
+  "name": "graphqldb",
   "version": "1.0.0",
   "description": "",
+  "private": true,
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "build": "yarn workspaces run build",
+    "test": "yarn  workspaces run test"
   },
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "aws-sdk": "^2.1190.0",
-    "eslint": "^8.21.0",
-    "graphql": "^16.5.0",
-    "mustache": "^4.2.0",
-    "ts-node": "^10.9.1",
-    "uuid": "^8.3.2"
-  },
-  "devDependencies": {
-    "@babel/preset-typescript": "^7.18.6",
-    "@types/jest": "^28.1.6",
-    "@types/mustache": "^4.2.1",
-    "@types/uuid": "^8.3.4",
-    "@typescript-eslint/eslint-plugin": "^5.33.0",
-    "@typescript-eslint/parser": "^5.33.0",
-    "apollo-server": "^3.10.0",
-    "jest": "^28.1.3",
-    "ts-jest": "^28.0.7",
-    "typescript": "^4.7.4",
-    "typescript-eslint": "^0.0.1-alpha.0"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
-    "testRegex": ".spec.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "coverageDirectory": "./coverage",
-    "testEnvironment": "node"
+  "license": "MIT",
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
   }
 }

@@ -1,0 +1,21 @@
+{
+    "name": "@graphqldb/test-utils",
+    "version": "1.0.0",
+    "description": "Test utils for graphqldb",
+    "main": "./tests/index.ts",
+    "scripts": {
+        "build": "gqldb",
+        "test": "echo '...'"
+    },
+    "author": "Tyson Cadenhead",
+    "license": "MIT",
+    "dependencies": {
+        "@graphqldb/adapter": "*",
+        "@graphqldb/client": "*",
+        "apollo-server": "^3.10.1"
+    },
+    "devDependencies": {
+        "@graphqldb/cli": "*",
+        "typescript": "^4.7.4"
+    }
+}
