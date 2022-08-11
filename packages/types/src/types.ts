@@ -5,6 +5,7 @@ export interface FlattenedField {
   type: string;
   originalType: string;
   required: boolean;
+  isArray: boolean;
 }
 
 export interface Flattened {
@@ -61,6 +62,7 @@ interface IRelationship {
   sk: string;
   objectType: string;
   keys: string[];
+  isArray: boolean;
 }
 
 export interface IRelationships {

@@ -2,6 +2,10 @@
 import * as fs from "fs";
 import * as path from "path";
 import { getAdapter } from "@graphqldb/client";
+interface IEmail {
+  domain?: string;
+  address?: string;
+}
 interface IAddress {
   id: string;
   personId: string;
@@ -53,6 +57,7 @@ interface IPerson {
   firstName: string;
   lastName: string;
   age?: number;
+  emails?: IEmail[];
   addresses: () => Promise<IAddress[]>;
 }
 interface IUpdatePerson {
@@ -60,6 +65,7 @@ interface IUpdatePerson {
   firstName: string;
   lastName: string;
   age?: number;
+  emails?: IEmail[];
 }
 interface IPersonSelectors {
   id: string;
@@ -78,6 +84,7 @@ interface ICreatePerson {
   firstName: string;
   lastName: string;
   age?: number;
+  emails?: IEmail[];
 }
 const optionsForAddress = {
   model: "Address",

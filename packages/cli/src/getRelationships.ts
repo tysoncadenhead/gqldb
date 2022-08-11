@@ -26,10 +26,10 @@ export const getRelationships = (models: IModels): IRelationships => {
           const skKeys = getKeyArgs('sk', directive);
           const keys = [...new Set([...pkKeys, ...skKeys])];
           const loc = field.astNode.type.loc;
-          const objectType =
-            loc.startToken.kind === '['
-              ? loc.startToken.next.value
-              : loc.startToken.value;
+          const isArray = loc.startToken.kind === '[';
+          const objectType = isArray
+            ? loc.startToken.next.value
+            : loc.startToken.value;
           const tsType = `I${objectType}`;
 
           return {
@@ -42,6 +42,7 @@ export const getRelationships = (models: IModels): IRelationships => {
               sk,
               keys,
               objectType,
+              isArray,
             },
           };
         }, {}),

@@ -3,8 +3,25 @@ import {
   IOptions,
   ISelectors,
   IModelSettings,
+  FlattenedField,
 } from '@graphqldb/types';
-import {getIndexArgs} from './utils/getIndexArgs';
+import {getIndexArgs} from '../utils/getIndexArgs';
+
+const formatField = (model: FlattenedField) => (item) => {
+  const {key, originalType, required, isArray} = model[item];
+  return `   ${key}: ${isArray ? `[` : ''}${originalType}${
+    required ? '!' : ''
+  }${isArray ? `]${required ? '!' : ''}` : ''}`;
+};
+
+const formatInputField =
+  (model: FlattenedField, objectTypes: Flattened) => (item) => {
+    const {key, originalType, required, isArray} = model[item];
+    const isObjectType = !!objectTypes[originalType];
+    return `   ${key}: ${isArray ? `[` : ''}${originalType}${
+      isObjectType ? 'Input' : ''
+    }${required ? '!' : ''}${isArray ? `]${required ? '!' : ''}` : ''}`;
+  };
 
 export const generateSchema = (
   schemaString: string,
@@ -12,13 +29,21 @@ export const generateSchema = (
   flattened: Flattened,
   selectors: ISelectors,
   modelSettings: IModelSettings,
+  objectTypes: Flattened,
 ) => {
   if (!options.generateApi) {
     return '';
   }
 
   const generatedSchema = `
-
+${Object.keys(objectTypes)
+  .map((current) => {
+    const model = objectTypes[current];
+    return `input ${current}Input {
+${Object.keys(model).map(formatInputField(model, objectTypes)).join('\n')}
+}`;
+  })
+  .join('\n')}
 ${Object.keys(flattened).reduce((prev, current) => {
   const model = flattened[current];
 
@@ -38,10 +63,7 @@ ${Object.keys(model)
     const {type} = model[item];
     return type !== 'key';
   })
-  .map((item) => {
-    const {key, originalType, required} = model[item];
-    return `   ${key}: ${originalType}${required ? '!' : ''}`;
-  })
+  .map(formatField(model))
   .join('\n')}
 }
 
@@ -50,10 +72,7 @@ ${Object.keys(model)
   .filter((item) => {
     return selectors[current].fields.includes(model[item].key);
   })
-  .map((item) => {
-    const {key, originalType, required} = model[item];
-    return `   ${key}: ${originalType}${required ? '!' : ''}`;
-  })
+  .map(formatField(model))
   .join('\n')}
 }
 
@@ -103,10 +122,7 @@ ${Object.keys(model)
     const {generated} = model[item];
     return !generated;
   })
-  .map((item) => {
-    const {key, originalType, required} = model[item];
-    return `   ${key}: ${originalType}${required ? '!' : ''}`;
-  })
+  .map(formatInputField(model, objectTypes))
   .join('\n')}
 }
 
@@ -118,10 +134,7 @@ ${Object.keys(model)
       .map((key) => `I${key}`)
       .includes(type);
   })
-  .map((item) => {
-    const {key, originalType, required} = model[item];
-    return `   ${key}: ${originalType}${required ? '!' : ''}`;
-  })
+  .map(formatInputField(model, objectTypes))
   .join('\n')}
 }`;
 }, ``)}

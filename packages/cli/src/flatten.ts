@@ -1,18 +1,5 @@
 import {Flattened, FlattenedField, IModels} from '@graphqldb/types';
-import {relationshipTypes} from './constants';
-
-const typeMap = {
-  String: 'string',
-  Int: 'number',
-  Float: 'number',
-  Boolean: 'boolean',
-  ID: 'string',
-  DateTime: 'string',
-  Date: 'string',
-  Time: 'string',
-};
-
-const generatedTypes = ['key', 'pk', 'sk'];
+import {relationshipTypes, typeMap, generatedTypes} from './constants';
 
 export const flatten = (models: IModels): Flattened => {
   return Object.keys(models).reduce((prev, current) => {
@@ -31,9 +18,12 @@ export const flatten = (models: IModels): Flattened => {
         })
         .map((key) => {
           const loc = model._fields[key].astNode.type.loc;
-          const originalType = loc.startToken.value;
-          const type =
-            typeMap[loc.startToken.value] || `I${loc.startToken.value}`;
+          const isArray = loc.startToken.kind === '[';
+          const startToken = isArray
+            ? loc.startToken.next.value
+            : loc.startToken.value;
+          const originalType = startToken;
+          const type = typeMap[startToken] || `I${startToken}`;
           const required = loc.endToken.kind === '!';
 
           return {
@@ -41,6 +31,7 @@ export const flatten = (models: IModels): Flattened => {
             type,
             required,
             originalType,
+            isArray,
             generated: !!(model._fields[key].astNode.directives || []).find(
               (directive) => directive.name.value === 'generated',
             ),

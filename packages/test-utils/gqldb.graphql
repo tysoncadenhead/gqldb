@@ -14,6 +14,11 @@ type Address @model(
     person: Person! @belongsTo(pk: "Person", sk: "id:{{personId}}")
 }
 
+type Email {
+    domain: String
+    address: String
+}
+
 type Person @model(table: "mindful-ex-tyson") {
     pk: String! @pk(key: "Person")
     sk: String! @sk(key: "id:{{id}}")
@@ -22,4 +27,5 @@ type Person @model(table: "mindful-ex-tyson") {
     lastName: String!
     age: Int
     addresses: [Address!]! @hasMany(pk: "Address", sk: "personId:{{id}}")
+    emails: [Email]
 }

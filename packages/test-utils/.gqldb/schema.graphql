@@ -34,6 +34,11 @@ type Address {
   person: Person!
 }
 
+type Email {
+  domain: String
+  address: String
+}
+
 type Person {
   pk: String!
   sk: String!
@@ -42,6 +47,12 @@ type Person {
   lastName: String!
   age: Int
   addresses: [Address!]!
+  emails: [Email]
+}
+
+input EmailInput {
+  domain: String
+  address: String
 }
 
 type PaginatedAddress {
@@ -116,6 +127,7 @@ input CreatePersonInput {
   firstName: String!
   lastName: String!
   age: Int
+  emails: [EmailInput]
 }
 
 input UpdatePersonInput {
@@ -123,6 +135,7 @@ input UpdatePersonInput {
   firstName: String!
   lastName: String!
   age: Int
+  emails: [EmailInput]
 }
 
 type Query {

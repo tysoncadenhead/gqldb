@@ -1,51 +1,39 @@
 import {buildSchema, printSchema} from 'graphql';
 import {flatten} from './flatten';
-import {generateTypescript} from './generateTypescript';
+import {
+  generateTypescript,
+  generateSchema,
+  generateResolvers,
+} from './generate';
 import {writeGeneratedScript} from './writeGeneratedScript';
 import {getSelectors} from './getSelectors';
 import {IOptions} from '@graphqldb/types';
 import {customDirectives} from './customDirectives';
 import {getModelSettings} from './getModelSettings';
 import {getRelationships} from './getRelationships';
-import {generateResolvers} from './generateResolvers';
-import {generateSchema} from './generateSchema';
 import {writeGeneratedSchema} from './writeGeneratedSchema';
+import {getModels, getObjectTypes} from './transformers';
 
 export const generate = async (schemaString: string, options?: IOptions) => {
   const combinedSchema = `${customDirectives}
 ${schemaString}`;
   const schema = buildSchema(combinedSchema);
-  const typeMap = schema.getTypeMap();
 
-  const models = Object.keys(typeMap).reduce(
-    (prev, current) => {
-      const hasModelDirective = (
-        typeMap[current]?.astNode?.directives || []
-      ).some((directive) => directive.name.value === 'model');
-      if (hasModelDirective) {
-        return {
-          ...prev,
-          [current]: typeMap[current],
-        };
-      }
-
-      return prev;
-    },
-    {} as {
-      [key: string]: any;
-    },
-  );
+  const objectTypes = getObjectTypes(schema);
+  const models = getModels(schema);
 
   const modelSettings = getModelSettings(models, options);
   const flattened = flatten(models);
   const selectors = getSelectors(models);
   const relationships = getRelationships(models);
+  const flattenedObjectTypes = flatten(objectTypes);
   const generated = generateTypescript(
     options,
     flattened,
     selectors,
     modelSettings,
     relationships,
+    flattenedObjectTypes,
   );
   const generatedResolvers = generateResolvers(
     options,
@@ -60,6 +48,7 @@ ${schemaString}`;
     flattened,
     selectors,
     modelSettings,
+    flattenedObjectTypes,
   );
 
   writeGeneratedScript(
@@ -70,6 +59,7 @@ ${schemaString}`;
   );
 
   if (options.generateApi) {
+    writeGeneratedSchema(generatedSchema, options);
     writeGeneratedSchema(printSchema(buildSchema(generatedSchema)), options);
   }
 
