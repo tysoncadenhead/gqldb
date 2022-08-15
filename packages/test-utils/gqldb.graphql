@@ -29,3 +29,18 @@ type Person @model(table: "mindful-ex-tyson") {
     addresses: [Address!]! @hasMany(pk: "Address", sk: "personId:{{id}}")
     emails: [Email]
 }
+
+type Validation @model(table: "mindful-ex-tyson") {
+    pk: String! @pk(key: "Validation")
+    sk: String! @sk(key: "id:{{id}}")
+    id: ID! @generated
+    minLength: String! @constraint(minLength: 3)
+    maxLength: String! @constraint(maxLength: 3)
+    min: Int! @constraint(min: 3)
+    max: Int! @constraint(min: 3)
+    pattern: String! @constraint(pattern: "[a-z]*")
+    startsWith: String! @constraint(startsWith: "a")
+    endsWith: String! @constraint(endsWith: "a")
+    contains: String! @constraint(contains: "a")
+    notContains: String! @constraint(notContains: "a")
+}

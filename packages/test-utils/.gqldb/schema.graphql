@@ -14,6 +14,8 @@ directive @hasMany(pk: String!, sk: String!) on FIELD_DEFINITION
 
 directive @generated on FIELD_DEFINITION
 
+directive @constraint(minLength: Int, maxLength: Int, startsWith: String, endsWith: String, contains: String, notContains: String, pattern: String, min: Int, max: Int) on FIELD_DEFINITION
+
 input GQLDBIndex {
   name: String!
   index: String!
@@ -48,6 +50,21 @@ type Person {
   age: Int
   addresses: [Address!]!
   emails: [Email]
+}
+
+type Validation {
+  pk: String!
+  sk: String!
+  id: ID!
+  minLength: String!
+  maxLength: String!
+  min: Int!
+  max: Int!
+  pattern: String!
+  startsWith: String!
+  endsWith: String!
+  contains: String!
+  notContains: String!
 }
 
 input EmailInput {
@@ -138,12 +155,59 @@ input UpdatePersonInput {
   emails: [EmailInput]
 }
 
+type PaginatedValidation {
+  limit: Int!
+  lastKey: String
+  items: [Validation!]!
+}
+
+input GetValidationInput {
+  id: ID!
+}
+
+input DeleteValidationInput {
+  id: ID!
+}
+
+input QueryValidationRecordsInput {
+  limit: Int
+  startKey: String
+  id: ID
+}
+
+input CreateValidationInput {
+  minLength: String!
+  maxLength: String!
+  min: Int!
+  max: Int!
+  pattern: String!
+  startsWith: String!
+  endsWith: String!
+  contains: String!
+  notContains: String!
+}
+
+input UpdateValidationInput {
+  id: ID!
+  minLength: String!
+  maxLength: String!
+  min: Int!
+  max: Int!
+  pattern: String!
+  startsWith: String!
+  endsWith: String!
+  contains: String!
+  notContains: String!
+}
+
 type Query {
   getAddress(input: GetAddressInput!): Address!
   queryAddressRecords(input: QueryAddressRecordsInput!): PaginatedAddress!
   queryAddressRecordsByState(input: QueryAddressRecordsByStateInput!): PaginatedAddress!
   getPerson(input: GetPersonInput!): Person!
   queryPersonRecords(input: QueryPersonRecordsInput!): PaginatedPerson!
+  getValidation(input: GetValidationInput!): Validation!
+  queryValidationRecords(input: QueryValidationRecordsInput!): PaginatedValidation!
 }
 
 type Mutation {
@@ -153,4 +217,7 @@ type Mutation {
   createPerson(input: CreatePersonInput!): Person!
   updatePerson(input: UpdatePersonInput!): Person!
   deletePerson(input: DeletePersonInput!): Person!
+  createValidation(input: CreateValidationInput!): Validation!
+  updateValidation(input: UpdateValidationInput!): Validation!
+  deleteValidation(input: DeleteValidationInput!): Validation!
 }

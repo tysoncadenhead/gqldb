@@ -13,6 +13,7 @@ import {getModelSettings} from './getModelSettings';
 import {getRelationships} from './getRelationships';
 import {writeGeneratedSchema} from './writeGeneratedSchema';
 import {getModels, getObjectTypes} from './transformers';
+import {getValidations} from './getValidations';
 
 export const generate = async (schemaString: string, options?: IOptions) => {
   const combinedSchema = `${customDirectives}
@@ -27,6 +28,7 @@ ${schemaString}`;
   const selectors = getSelectors(models);
   const relationships = getRelationships(models);
   const flattenedObjectTypes = flatten(objectTypes);
+  const validations = getValidations(models);
   const generated = generateTypescript(
     options,
     flattened,
@@ -34,6 +36,7 @@ ${schemaString}`;
     modelSettings,
     relationships,
     flattenedObjectTypes,
+    validations,
   );
   const generatedResolvers = generateResolvers(
     options,

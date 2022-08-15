@@ -16,4 +16,15 @@ export const customDirectives = gql`
   directive @hasOne(pk: String!, sk: String!) on FIELD_DEFINITION
   directive @hasMany(pk: String!, sk: String!) on FIELD_DEFINITION
   directive @generated on FIELD_DEFINITION
+  directive @constraint(
+    minLength: Int
+    maxLength: Int
+    startsWith: String
+    endsWith: String
+    contains: String
+    notContains: String
+    pattern: String
+    min: Int
+    max: Int
+  ) on FIELD_DEFINITION
 `;
