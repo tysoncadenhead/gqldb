@@ -5,13 +5,13 @@ import {
   generateSchema,
   generateResolvers,
 } from './generate';
-import {writeGeneratedScript} from './writeGeneratedScript';
+import {writeGeneratedScript} from './writers/writeGeneratedScript';
 import {getSelectors} from './getSelectors';
 import {IOptions} from '@graphqldb/types';
 import {customDirectives} from './customDirectives';
 import {getModelSettings} from './getModelSettings';
 import {getRelationships} from './getRelationships';
-import {writeGeneratedSchema} from './writeGeneratedSchema';
+import {writeGeneratedSchema} from './writers/writeGeneratedSchema';
 import {getModels, getObjectTypes} from './transformers';
 import {getValidations} from './getValidations';
 

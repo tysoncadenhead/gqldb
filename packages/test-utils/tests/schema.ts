@@ -2,7 +2,7 @@ import {gql} from './gql';
 import {AdapterInterface} from '@graphqldb/adapter';
 import {setAdapter} from '@graphqldb/client';
 import {ApolloServer} from 'apollo-server';
-import {getResolvers, getTypeDefs} from '../.gqldb';
+import {getResolvers, getTypeDefs, Permissions} from '../.gqldb';
 import {cleanup} from './cleanup';
 
 const CREATE_PERSON_QUERY = gql`
@@ -95,6 +95,25 @@ const DELETE_PERSON_QUERY = gql`
 
 const createTestServer = async () => {
   const resolvers = getResolvers();
+  const typeDefs = getTypeDefs();
+  return new ApolloServer({
+    typeDefs,
+    resolvers,
+  });
+};
+
+const createTestServerWithAuth = async () => {
+  const allowedPermissions = [
+    Permissions['person.create'],
+    Permissions['person.delete'],
+  ];
+  const resolvers = getResolvers({
+    checkPermissions: (permissions, _ctx) => {
+      return permissions.every((permission) =>
+        allowedPermissions.includes(permission),
+      );
+    },
+  });
   const typeDefs = getTypeDefs();
   return new ApolloServer({
     typeDefs,
@@ -238,5 +257,21 @@ export const schema = (adapterName: string, adapterType: AdapterInterface) =>
       });
 
       expect(res4.data?.getAddress.person.firstName).toBe('John');
+    });
+
+    it('Should not allow a user to be fetched if the auth check returns false', async () => {
+      const testServer = await createTestServerWithAuth();
+      const res = await createPerson(testServer);
+
+      const res2 = await testServer.executeOperation({
+        query: GET_PERSON_QUERY,
+        variables: {
+          input: {
+            id: res.data?.createPerson.id,
+          },
+        },
+      });
+
+      expect(res2.errors[0].message).toBe('Unauthorized');
     });
   });
