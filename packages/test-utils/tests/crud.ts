@@ -47,13 +47,13 @@ export const crud = (adapterName: string, adapterType: AdapterInterface) =>
 
     it('Should delete', async () => {
       const record = await Person.create({
-        firstName: 'John',
+        firstName: 'James',
         lastName: 'Doe',
       });
 
       const person = await Person.delete({id: record.id});
 
-      expect(person.firstName).toBe('John');
+      expect(person.firstName).toBe('James');
       expect(person.lastName).toBe('Doe');
     });
 

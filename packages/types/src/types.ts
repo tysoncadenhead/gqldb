@@ -29,8 +29,8 @@ export interface ISelectors {
 export interface IOptions {
   tableName?: string;
   generateApi?: boolean;
-  outputScriptPath?: string;
-  outputSchemaPath?: string;
+  outputPath?: string;
+  adapter?: string;
 }
 
 export interface IIndex {
@@ -69,4 +69,33 @@ export interface IRelationships {
   [model: string]: {
     [field: string]: IRelationship;
   };
+}
+
+export interface IValidations {
+  [model: string]: {
+    [field: string]: {
+      [constraint: string]: string;
+    };
+  };
+}
+
+export interface IOut {
+  [key: string]: string;
+}
+
+export interface IProcessor {
+  options: IOptions;
+  flattened: Flattened;
+  selectors: ISelectors;
+  modelSettings: IModelSettings;
+  relationships: IRelationships;
+  objectTypes: Flattened;
+  validations: IValidations;
+  combinedSchema: string;
+  prev?: IOut;
+}
+
+export interface IWriter {
+  options: IOptions;
+  out: IOut;
 }

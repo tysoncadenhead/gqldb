@@ -1,57 +1,62 @@
-import {
-  Flattened,
-  IOptions,
-  IRelationships,
-  ISelectors,
-  IModelSettings,
-} from '@graphqldb/types';
+import {IOut} from '@graphqldb/types';
 import {toCamelCase} from '../utils/toCamelCase';
+import {IProcessor} from '../types';
+import {getModels} from '../selectors/getModels';
+import {getRelationships} from '../selectors/getRelationships';
+import {removeEmptyLines} from '../utils/removeEmptyLines';
+import {getKeys} from '../selectors/getKeys';
+import {getKeysForRelationship} from '../selectors/getKeysForRelationship';
 
-export const generateResolvers = (
-  options: IOptions,
-  flattened: Flattened,
-  selectors: ISelectors,
-  relationships: IRelationships,
-  modelSettings: IModelSettings,
-) => {
+export const resolverProcessor = ({options, json, prev}: IProcessor): IOut => {
   if (!options.generateApi) {
-    return '';
+    return prev;
   }
 
-  return `
+  const models = getModels(json);
+  const relationships = getRelationships(json);
+  const keys = getKeys(json);
+
+  return {
+    ...prev,
+    ts: removeEmptyLines(`${prev?.ts || ''}
 interface IGetResolvers {
   checkPermissions: (permissions: Permissions[], ctx: any) => boolean;
 }
 
 export const getResolvers = (resolverOptions?: IGetResolvers) => ({
-${Object.keys(flattened).reduce((prev, current) => {
+${Object.keys(models).reduce((prev, current) => {
   return `${prev}
   ${current}: {
-${Object.keys(relationships[current])
+${Object.keys(relationships[current].fields)
   .map((item) => {
-    const {type, objectType, keys} = relationships[current][item];
+    const {type, directives} = relationships[current].fields[item];
+    const belongToMap = directives.belongsTo
+      ? getKeysForRelationship(directives.belongsTo, models[type])
+      : {};
+    const hasManyMap = directives.hasMany
+      ? getKeysForRelationship(directives.hasMany, models[type])
+      : {};
 
     return `    ${item}: async (ctx) => {
       checkPermissions([Permissions["${toCamelCase(
-        objectType,
+        type,
       )}.read"]], ctx, resolverOptions?.checkPermissions);
       ${
-        type === 'belongsTo' || type === 'hasOne'
-          ? `return await ${objectType}.find({${Object.keys(keys).reduce(
-              (prev, i) => {
-                return `${prev} ${[selectors[objectType].fields[i]]}: ctx.${
-                  keys[i]
-                },`;
+        Object.keys(belongToMap).length
+          ? `return await ${type}.find({${Object.keys(belongToMap).reduce(
+              (prev, key) => {
+                return `${prev} ${belongToMap[key]}: ctx.${key},`;
               },
               '',
             )}})`
-          : type === 'hasMany'
-          ? `const result = await ${objectType}.query({${Object.keys(
-              keys,
-            ).reduce((prev, i) => {
-              return `${prev} ${[selectors[objectType].fields[i]]}: ctx.${
-                keys[i]
-              },`;
+          : ''
+      }
+      ${
+        Object.keys(hasManyMap).length
+          ? `const result = await ${type}.query({${Object.keys(
+              hasManyMap,
+            ).reduce((prev, key) => {
+              return `${prev} ${key}: ctx.${hasManyMap[key]},`;
             }, '')}});
       return result.items;`
           : ''
@@ -62,7 +67,7 @@ ${Object.keys(relationships[current])
   },`;
 }, ``)}
   Query: {
-${Object.keys(flattened).reduce((prev, current) => {
+${Object.keys(models).reduce((prev, current) => {
   return `${prev}
     get${current}: async (a, b) => {
       const args = getArguments<I${current}Selectors>(a, b);
@@ -80,7 +85,7 @@ ${Object.keys(flattened).reduce((prev, current) => {
       )}.read"]], ctx, resolverOptions?.checkPermissions);
       return await ${current}.query(args);
     },
-    ${modelSettings[current].indexes
+    ${(models[current].directives.model.indexes || [])
       .map(
         (index) => `query${current}Records${index.name}: async (a, b) => {
       const args = getArguments<I${current}${index.name}QuerySelectors>(a, b);
@@ -95,7 +100,7 @@ ${Object.keys(flattened).reduce((prev, current) => {
 }, ``)}
   },
   Mutation: {
-${Object.keys(flattened).reduce((prev, current) => {
+${Object.keys(models).reduce((prev, current) => {
   return `${prev}
     create${current}: async (a, b) => {
       const args = getArguments<ICreate${current}>(a, b);
@@ -125,5 +130,6 @@ ${Object.keys(flattened).reduce((prev, current) => {
   },
 });
 
-export const getTypeDefs = () => fs.readFileSync(path.resolve(__dirname, './schema.graphql'), 'utf8');`;
+export const getTypeDefs = () => fs.readFileSync(path.resolve(__dirname, './schema.graphql'), 'utf8');`),
+  };
 };

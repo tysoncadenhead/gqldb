@@ -1,13 +1,13 @@
 import * as fs from 'fs';
+import {IWriter} from '@graphqldb/types';
+import {buildSchema, printSchema} from 'graphql';
 
-import {IOptions} from '@graphqldb/types';
-
-export const writeGeneratedSchema = (schema: string, options: IOptions) => {
-  if (!options.outputSchemaPath) {
-    fs.existsSync('./.gqldb') || fs.mkdirSync('./.gqldb');
-  }
+export const writeGeneratedSchema = ({options, out}: IWriter) => {
+  console.log('Writing generated schema...');
+  const outputPath = options?.outputPath || './.gqldb';
+  fs.existsSync(outputPath) || fs.mkdirSync(outputPath);
   fs.writeFileSync(
-    options.outputSchemaPath || './.gqldb/schema.graphql',
-    schema,
+    `${outputPath}/schema.graphql`,
+    printSchema(buildSchema(out.schema)),
   );
 };

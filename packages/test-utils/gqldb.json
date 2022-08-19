@@ -1,0 +1,5 @@
+{
+    "generateApi": true,
+    "tableName": "mindful-ex-tyson",
+    "adapter": "@graphqldb/adapter-dynamodb"
+}

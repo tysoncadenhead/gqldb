@@ -1,9 +1,11 @@
 import * as fs from 'fs';
-import {IOptions} from '@graphqldb/types';
+import {IWriter} from '@graphqldb/types';
 
-export const writeGeneratedScript = (ts: string, options: IOptions) => {
-  if (!options.outputScriptPath) {
-    fs.existsSync('./.gqldb') || fs.mkdirSync('./.gqldb');
-  }
-  fs.writeFileSync(options.outputScriptPath || './.gqldb/index.ts', ts);
+export const writeGeneratedScript = ({options, out}: IWriter) => {
+  const outputPath = options?.outputPath || './.gqldb';
+  fs.existsSync(outputPath) || fs.mkdirSync(outputPath);
+  fs.writeFileSync(
+    `${outputPath}/index.ts`,
+    `${out.ts}`.replace(/'/g, '"').replace(/\n\n*/g, '\r\n'),
+  );
 };

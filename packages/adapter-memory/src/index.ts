@@ -1,1 +1,3 @@
-export * from './memoryAdapter';
+import {memoryAdapter} from './memoryAdapter';
+
+export default memoryAdapter;

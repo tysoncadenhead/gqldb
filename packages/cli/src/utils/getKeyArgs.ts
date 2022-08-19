@@ -1,6 +1,6 @@
 import {getKeyValue} from './getKeyValue';
 
-export const parseKeyArgs = (keyValue: string) => {
+export const parseKeyArgs = (keyValue: string = '') => {
   return keyValue
     .split('{{')
     .filter((key) => key.includes('}}'))

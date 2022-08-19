@@ -1,26 +1,17 @@
-directive @model(table: String, indexes: [GQLDBIndex]) on OBJECT
+input EmailInput {
+  domain: String
+  address: String
+}
 
-directive @pk(key: String!) on FIELD_DEFINITION
+type Email {
+  domain: String
+  address: String
+}
 
-directive @sk(key: String!) on FIELD_DEFINITION
-
-directive @key(key: String!) on FIELD_DEFINITION
-
-directive @belongsTo(pk: String!, sk: String!) on FIELD_DEFINITION
-
-directive @hasOne(pk: String!, sk: String!) on FIELD_DEFINITION
-
-directive @hasMany(pk: String!, sk: String!) on FIELD_DEFINITION
-
-directive @generated on FIELD_DEFINITION
-
-directive @constraint(minLength: Int, maxLength: Int, startsWith: String, endsWith: String, contains: String, notContains: String, pattern: String, min: Int, max: Int) on FIELD_DEFINITION
-
-input GQLDBIndex {
-  name: String!
-  index: String!
-  pk: String!
-  sk: String!
+type PaginatedAddress {
+  limit: Int!
+  lastKey: String
+  items: [Address!]!
 }
 
 type Address {
@@ -34,48 +25,6 @@ type Address {
   state: String!
   zip: String!
   person: Person!
-}
-
-type Email {
-  domain: String
-  address: String
-}
-
-type Person {
-  pk: String!
-  sk: String!
-  id: ID!
-  firstName: String!
-  lastName: String!
-  age: Int
-  addresses: [Address!]!
-  emails: [Email]
-}
-
-type Validation {
-  pk: String!
-  sk: String!
-  id: ID!
-  minLength: String!
-  maxLength: String!
-  min: Int!
-  max: Int!
-  pattern: String!
-  startsWith: String!
-  endsWith: String!
-  contains: String!
-  notContains: String!
-}
-
-input EmailInput {
-  domain: String
-  address: String
-}
-
-type PaginatedAddress {
-  limit: Int!
-  lastKey: String
-  items: [Address!]!
 }
 
 input GetAddressInput {
@@ -99,8 +48,6 @@ input QueryAddressRecordsByStateInput {
 input QueryAddressRecordsInput {
   limit: Int
   startKey: String
-  id: ID
-  personId: ID
 }
 
 input CreateAddressInput {
@@ -126,6 +73,17 @@ type PaginatedPerson {
   items: [Person!]!
 }
 
+type Person {
+  pk: String!
+  sk: String!
+  id: ID!
+  firstName: String!
+  lastName: String!
+  age: Int
+  addresses: [Address!]!
+  emails: [Email]
+}
+
 input GetPersonInput {
   id: ID!
 }
@@ -137,7 +95,6 @@ input DeletePersonInput {
 input QueryPersonRecordsInput {
   limit: Int
   startKey: String
-  id: ID
 }
 
 input CreatePersonInput {
@@ -161,6 +118,21 @@ type PaginatedValidation {
   items: [Validation!]!
 }
 
+type Validation {
+  pk: String!
+  sk: String!
+  id: ID!
+  minLength: String!
+  maxLength: String!
+  min: Int!
+  max: Int!
+  pattern: String!
+  startsWith: String!
+  endsWith: String!
+  contains: String!
+  notContains: String!
+}
+
 input GetValidationInput {
   id: ID!
 }
@@ -172,7 +144,6 @@ input DeleteValidationInput {
 input QueryValidationRecordsInput {
   limit: Int
   startKey: String
-  id: ID
 }
 
 input CreateValidationInput {
