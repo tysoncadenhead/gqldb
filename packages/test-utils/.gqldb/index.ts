@@ -269,7 +269,7 @@ export const Validation = {
   },
 }
 interface IGetResolvers {
-  checkPermissions: (permissions: Permissions[], ctx: any) => boolean;
+  checkPermissions?: (permissions: Permissions[], ctx: any) => boolean;
 }
 export const getResolvers = (resolverOptions?: IGetResolvers) => ({
   Address: {

@@ -7,7 +7,29 @@ const cli = async () => {
   console.log('Generating schema...');
 
   if (!fs.existsSync(`${currentDirectory}/gqldb.graphql`)) {
-    throw new Error(`No gqldb.graphql found in ${currentDirectory}`);
+    fs.writeFileSync(
+      `${currentDirectory}/gqldb.graphql`,
+      `pk: String! @key(key: "Person", type: "pk")
+sk: String! @key(key: "id:{{id}}", type: "sk")
+type Person @model {
+  id: ID! @uuid
+  firstName: String!
+  lastName: String!
+}`,
+      'utf8',
+    );
+  }
+
+  if (!fs.existsSync(`${currentDirectory}/gqldb.json`)) {
+    fs.writeFileSync(
+      `${currentDirectory}/gqldb.json`,
+      JSON.stringify({
+        generateApi: true,
+        tableName: 'my-gqldb-table',
+        adapter: '@graphqldb/adapter-memory',
+      }),
+      'utf8',
+    );
   }
 
   const schema = fs.readFileSync(`${currentDirectory}/gqldb.graphql`, 'utf8');

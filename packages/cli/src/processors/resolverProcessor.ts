@@ -20,7 +20,7 @@ export const resolverProcessor = ({options, json, prev}: IProcessor): IOut => {
     ...prev,
     ts: removeEmptyLines(`${prev?.ts || ''}
 interface IGetResolvers {
-  checkPermissions: (permissions: Permissions[], ctx: any) => boolean;
+  checkPermissions?: (permissions: Permissions[], ctx: any) => boolean;
 }
 
 export const getResolvers = (resolverOptions?: IGetResolvers) => ({
