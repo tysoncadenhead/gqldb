@@ -11,7 +11,9 @@ import * as fs from 'fs';
 import * as path from 'path';
 import adapter from '${options?.adapter || '@graphqldb/adapter-memory'}';
 import { setAdapter, getAdapter, validate${
-      options.generateApi ? ', getArguments, getContext, checkPermissions' : ''
+      options.generateApi
+        ? ', getArguments, getContext, checkPermissions, wrapResolver'
+        : ''
     } } from '@graphqldb/client';
 setAdapter(adapter);`),
   };

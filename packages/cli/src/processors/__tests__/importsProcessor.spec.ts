@@ -6,7 +6,7 @@ describe('objectInterfacesProcessor', () => {
 import * as fs from 'fs';
 import * as path from 'path';
 import adapter from '@graphqldb/adapter-memory';
-import { setAdapter, getAdapter, validate, getArguments, getContext, checkPermissions } from '@graphqldb/client';
+import { setAdapter, getAdapter, validate, getArguments, getContext, checkPermissions, wrapResolver } from '@graphqldb/client';
 setAdapter(adapter);`;
 
     const result = importsProcessor({
