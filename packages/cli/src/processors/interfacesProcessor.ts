@@ -1,4 +1,4 @@
-import {IOut} from '@graphqldb/types';
+import {IOut} from 'graphqldb-types';
 import {getIndexArgs} from '../utils/getIndexArgs';
 import {IProcessor} from '../types';
 import {getModels} from '../selectors/getModels';

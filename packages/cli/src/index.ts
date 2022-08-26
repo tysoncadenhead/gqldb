@@ -1,6 +1,6 @@
 import processors from './processors';
 import writers from './writers';
-import {IOptions, IOut} from '@graphqldb/types';
+import {IOptions, IOut} from 'graphqldb-types';
 import {schemaToJson} from './transformers/schemaToJson';
 
 export const generate = async (schemaString: string, options?: IOptions) => {

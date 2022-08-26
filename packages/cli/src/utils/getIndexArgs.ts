@@ -1,4 +1,4 @@
-import {IIndex} from '@graphqldb/types';
+import {IIndex} from 'graphqldb-types';
 import {ISchemaJsonModel} from '../types';
 import {parseKeyArgs} from './getKeyArgs';
 

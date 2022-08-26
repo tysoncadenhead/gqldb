@@ -1,4 +1,4 @@
-import {IOut} from '@graphqldb/types';
+import {IOut} from 'graphqldb-types';
 import {toCamelCase} from '../utils/toCamelCase';
 import {IProcessor} from '../types';
 import {getModels} from '../selectors/getModels';

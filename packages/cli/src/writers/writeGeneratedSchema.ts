@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import {IWriter} from '@graphqldb/types';
+import {IWriter} from 'graphqldb-types';
 import {buildSchema, printSchema} from 'graphql';
 
 export const writeGeneratedSchema = ({options, out}: IWriter) => {

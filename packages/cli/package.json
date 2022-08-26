@@ -1,5 +1,5 @@
 {
-    "name": "@graphqldb/cli",
+    "name": "graphqldb-cli",
     "version": "1.0.0",
     "description": "The CLI for graphqldb",
     "main": "lib/index.js",
@@ -13,7 +13,7 @@
         "gqldb": "bin/gqldb"
     },
     "dependencies": {
-        "@graphqldb/types": "*",
+        "graphqldb-types": "*",
         "graphql": "^16.5.0"
     },
     "devDependencies": {

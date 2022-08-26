@@ -1,4 +1,4 @@
-import {ISelectors} from '@graphqldb/types';
+import {ISelectors} from 'graphqldb-types';
 import {ISchemaJson, KeyType} from '../types';
 import {getModels} from './getModels';
 

@@ -26,7 +26,7 @@ type Person @model {
       JSON.stringify({
         generateApi: true,
         tableName: 'my-gqldb-table',
-        adapter: '@graphqldb/adapter-memory',
+        adapter: 'graphqldb-adapter-memory',
       }),
       'utf8',
     );

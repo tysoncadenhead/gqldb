@@ -1,4 +1,4 @@
-import {IOptions, IOut} from '@graphqldb/types';
+import {IOptions, IOut} from 'graphqldb-types';
 
 export interface ISchemaJsonIndex {
   name: string;

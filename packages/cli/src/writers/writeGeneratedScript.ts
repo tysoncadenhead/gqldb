@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import {IWriter} from '@graphqldb/types';
+import {IWriter} from 'graphqldb-types';
 
 export const writeGeneratedScript = ({options, out}: IWriter) => {
   const outputPath = options?.outputPath || './.gqldb';

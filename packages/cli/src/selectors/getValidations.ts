@@ -1,4 +1,4 @@
-import {IValidations} from '@graphqldb/types';
+import {IValidations} from 'graphqldb-types';
 import {ISchemaJson} from '../types';
 
 export const getValidations = (json: ISchemaJson): IValidations => {

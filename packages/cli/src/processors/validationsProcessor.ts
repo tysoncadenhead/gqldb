@@ -1,4 +1,4 @@
-import {IOut} from '@graphqldb/types';
+import {IOut} from 'graphqldb-types';
 import {getValidations} from '../selectors/getValidations';
 import {IProcessor} from '../types';
 

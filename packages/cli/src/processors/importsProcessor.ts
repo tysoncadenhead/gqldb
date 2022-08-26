@@ -1,4 +1,4 @@
-import {IOut} from '@graphqldb/types';
+import {IOut} from 'graphqldb-types';
 import {IProcessor} from '../types';
 import {removeEmptyLines} from '../utils/removeEmptyLines';
 
@@ -9,12 +9,12 @@ export const importsProcessor = ({options, prev}: IProcessor): IOut => {
 ${prev.ts || ''}
 import * as fs from 'fs';
 import * as path from 'path';
-import adapter from '${options?.adapter || '@graphqldb/adapter-memory'}';
+import adapter from '${options?.adapter || 'graphqldb-adapter-memory'}';
 import { setAdapter, getAdapter, validate${
       options.generateApi
         ? ', getArguments, getContext, checkPermissions, wrapResolver'
         : ''
-    } } from '@graphqldb/client';
+    } } from 'graphqldb-client';
 setAdapter(adapter);`),
   };
 };
