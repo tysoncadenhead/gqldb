@@ -1,5 +1,5 @@
 import Mustache from 'mustache';
-import {IKey} from '@graphqldb/types';
+import {IKey} from 'graphqldb-types';
 
 export const buildPartialKey = <T>(key: IKey, input: T) =>
   Mustache.render(key.value, {

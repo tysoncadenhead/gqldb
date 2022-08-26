@@ -1,4 +1,4 @@
-import {AdapterInterface} from '@graphqldb/adapter';
+import {AdapterInterface} from 'graphqldb-adapter';
 import {crud} from './crud';
 import {relationships} from './relationships';
 import {schema} from './schema';

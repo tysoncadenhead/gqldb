@@ -1,5 +1,5 @@
 {
-    "name": "@graphqldb/adapter-memory",
+    "name": "graphqldb-adapter-memory",
     "version": "1.0.0",
     "description": "A memory adapter for graphqldb",
     "main": "lib/index.js",
@@ -10,12 +10,12 @@
     "author": "Tyson Cadenhead",
     "license": "MIT",
     "dependencies": {
-        "@graphqldb/types": "*",
-        "@graphqldb/adapter": "*"
+        "graphqldb-types": "*",
+        "graphqldb-adapter": "*"
     },
     "devDependencies": {
-        "@graphqldb/client": "*",
-        "@graphqldb/test-utils": "*",
+        "graphqldb-client": "*",
+        "graphqldb-test-utils": "*",
         "jest": "^28.1.3",
         "ts-jest": "^28.0.7"
     },

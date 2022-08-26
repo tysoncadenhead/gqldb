@@ -1,5 +1,5 @@
 {
-    "name": "@graphqldb/types",
+    "name": "graphqldb-types",
     "version": "1.0.0",
     "description": "Shared types for graphqldb",
     "main": "lib/index.js",

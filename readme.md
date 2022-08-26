@@ -7,13 +7,13 @@ Why do APIs require so much boilerplate? If we know the types of our database sc
 ## Installation
 
 ```bash
-npm install @graphqldb/cli @graphqldb/client --save-dev
+npm install graphqldb-cli graphqldb-client --save-dev
 ```
 
 or
 
 ```bash
-yarn add @graphqldb/cli @graphqldb/client --dev
+yarn add graphqldb-cli graphqldb-client --dev
 ```
 
 ## Quick Start
@@ -32,7 +32,7 @@ The first time you run the `gqldb` command in your directory, we will generate a
 {
     "generateApi": true, # This is optional
     "tableName": "my-gqldb-table", # Your table name
-    "adapter": "@graphqldb/adapter-memory" # We plan to support multiple adapters starting with memory and dynamodb
+    "adapter": "graphqldb-adapter-memory" # We plan to support multiple adapters starting with memory and dynamodb
 }
 ```
 

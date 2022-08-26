@@ -1,6 +1,6 @@
 import {gql} from './gql';
-import {AdapterInterface} from '@graphqldb/adapter';
-import {setAdapter} from '@graphqldb/client';
+import {AdapterInterface} from 'graphqldb-adapter';
+import {setAdapter} from 'graphqldb-client';
 import {ApolloServer} from 'apollo-server';
 import {getResolvers, getTypeDefs, Permissions} from '../.gqldb';
 import {cleanup} from './cleanup';

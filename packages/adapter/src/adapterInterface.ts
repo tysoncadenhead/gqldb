@@ -1,4 +1,4 @@
-import {IAdapterOptions} from '@graphqldb/types';
+import {IAdapterOptions} from 'graphqldb-types';
 
 export interface AdapterInterface {
   create<A, B>(adapterOption: IAdapterOptions, input: A): Promise<B>;

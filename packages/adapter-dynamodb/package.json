@@ -1,5 +1,5 @@
 {
-    "name": "@graphqldb/adapter-dynamodb",
+    "name": "graphqldb-adapter-dynamodb",
     "version": "1.0.0",
     "description": "A DynamoDB adapter for graphqldb",
     "main": "lib/index.js",
@@ -10,13 +10,13 @@
     "author": "Tyson Cadenhead",
     "license": "MIT",
     "dependencies": {
-        "@graphqldb/types": "*",
-        "@graphqldb/adapter": "*",
+        "graphqldb-types": "*",
+        "graphqldb-adapter": "*",
         "aws-sdk": "^2.1190.0"
     },
     "devDependencies": {
-        "@graphqldb/client": "*",
-        "@graphqldb/test-utils": "*",
+        "graphqldb-client": "*",
+        "graphqldb-test-utils": "*",
         "jest": "^28.1.3",
         "ts-jest": "^28.0.7"
     },

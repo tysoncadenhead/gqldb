@@ -4,8 +4,8 @@ import {
   isMainKey,
   buildPartialKey,
   buildKey,
-} from '@graphqldb/adapter';
-import {IAdapterOptions} from '@graphqldb/types';
+} from 'graphqldb-adapter';
+import {IAdapterOptions} from 'graphqldb-types';
 
 const memory = {};
 

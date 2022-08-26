@@ -1,5 +1,5 @@
 {
-    "name": "@graphqldb/client",
+    "name": "graphqldb-client",
     "version": "1.0.0",
     "description": "Client for graphqldb",
     "main": "lib/index.js",
@@ -10,9 +10,9 @@
     "author": "Tyson Cadenhead",
     "license": "MIT",
     "dependencies": {
-        "@graphqldb/types": "*",
-        "@graphqldb/adapter": "*",
-        "@graphqldb/adapter-memory": "*"
+        "graphqldb-types": "*",
+        "graphqldb-adapter": "*",
+        "graphqldb-adapter-memory": "*"
     },
     "devDependencies": {
         "typescript": "^4.7.4",

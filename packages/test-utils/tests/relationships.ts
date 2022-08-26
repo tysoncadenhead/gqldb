@@ -1,5 +1,5 @@
-import {AdapterInterface} from '@graphqldb/adapter';
-import {setAdapter} from '@graphqldb/client';
+import {AdapterInterface} from 'graphqldb-adapter';
+import {setAdapter} from 'graphqldb-client';
 import {Person, Address} from '../.gqldb';
 import {cleanup} from './cleanup';
 

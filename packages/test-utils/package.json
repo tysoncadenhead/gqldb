@@ -1,5 +1,5 @@
 {
-    "name": "@graphqldb/test-utils",
+    "name": "graphqldb-test-utils",
     "version": "1.0.0",
     "description": "Test utils for graphqldb",
     "main": "./tests/index.ts",
@@ -10,12 +10,12 @@
     "author": "Tyson Cadenhead",
     "license": "MIT",
     "dependencies": {
-        "@graphqldb/adapter": "*",
-        "@graphqldb/client": "*",
+        "graphqldb-adapter": "*",
+        "graphqldb-client": "*",
         "apollo-server": "^3.10.1"
     },
     "devDependencies": {
-        "@graphqldb/cli": "*",
+        "graphqldb-cli": "*",
         "@types/jest": "^28.1.6",
         "typescript": "^4.7.4"
     }

@@ -1,5 +1,5 @@
-import {AdapterInterface} from '@graphqldb/adapter';
-import memoryAdapter from '@graphqldb/adapter-memory';
+import {AdapterInterface} from 'graphqldb-adapter';
+import memoryAdapter from 'graphqldb-adapter-memory';
 
 let adapter: AdapterInterface = memoryAdapter;
 

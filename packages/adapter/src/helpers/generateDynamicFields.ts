@@ -1,4 +1,4 @@
-import {IAdapterOptions} from '@graphqldb/types';
+import {IAdapterOptions} from 'graphqldb-types';
 import {v4 as uuid} from 'uuid';
 import Mustache from 'mustache';
 

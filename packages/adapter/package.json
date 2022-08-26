@@ -1,5 +1,5 @@
 {
-    "name": "@graphqldb/adapter",
+    "name": "graphqldb-adapter",
     "version": "1.0.0",
     "description": "The Adapter interface for graphqldb",
     "main": "lib/index.js",
@@ -10,7 +10,7 @@
     "author": "Tyson Cadenhead",
     "license": "MIT",
     "dependencies": {
-        "@graphqldb/types": "*",
+        "graphqldb-types": "*",
         "mustache": "^4.2.0",
         "uuid": "^8.3.2"
     },
