@@ -143,6 +143,7 @@ ${Object.keys(model.fields)
       !model.fields[item].directives.uuid &&
       !model.fields[item].directives.key &&
       !model.fields[item].directives.hasMany &&
+      !model.fields[item].directives.mapMany &&
       !model.fields[item].directives.belongsTo
     );
   })
@@ -162,6 +163,7 @@ ${Object.keys(model.fields)
     return (
       !model.fields[item].directives.key &&
       !model.fields[item].directives.hasMany &&
+      !model.fields[item].directives.mapMany &&
       !model.fields[item].directives.belongsTo
     );
   })

@@ -13,6 +13,7 @@ export const customDirectives = gql`
   directive @belongsTo(pk: String!, sk: String!) on FIELD_DEFINITION
   directive @hasOne(pk: String!, sk: String!) on FIELD_DEFINITION
   directive @hasMany(pk: String!, sk: String!) on FIELD_DEFINITION
+  directive @mapMany(map: String!, pk: String!, sk: String!) on FIELD_DEFINITION
   directive @uuid on FIELD_DEFINITION
   directive @constraint(
     minLength: Int

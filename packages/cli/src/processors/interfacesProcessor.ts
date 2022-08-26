@@ -25,6 +25,7 @@ ${Object.keys(model.fields)
     return (
       !field?.directives?.key &&
       !field?.directives?.hasMany &&
+      !field?.directives?.mapMany &&
       !field?.directives?.belongsTo
     );
   })
@@ -54,6 +55,7 @@ ${Object.keys(model.fields)
     return (
       !field?.directives?.key &&
       !field?.directives?.hasMany &&
+      !field?.directives?.mapMany &&
       !field?.directives?.belongsTo
     );
   })
@@ -136,6 +138,7 @@ ${Object.keys(model.fields)
     return (
       !field?.directives?.key &&
       !field?.directives?.hasMany &&
+      !field?.directives?.mapMany &&
       !field?.directives?.belongsTo &&
       !isUUID
     );

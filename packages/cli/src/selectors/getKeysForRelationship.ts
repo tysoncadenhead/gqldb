@@ -9,17 +9,17 @@ export const getKeysForRelationship = (
   relationship: ISchemaJsonRelationship,
   model: ISchemaJsonModel,
 ): IKeysForRelationship => {
-  const modelPk = Object.keys(model.fields)
-    .map((key) => model.fields[key])
+  const modelPk = Object.keys(model?.fields || {})
+    .map((key) => model?.fields[key])
     .find((field) => field.directives.key.type === KeyType.pk);
-  const modelSk = Object.keys(model.fields)
-    .map((key) => model.fields[key])
+  const modelSk = Object.keys(model?.fields || {})
+    .map((key) => model?.fields[key])
     .find((field) => field.directives.key.type === KeyType.sk);
 
   const pkArgs = parseKeyArgs(relationship.pk);
   const skArgs = parseKeyArgs(relationship.sk);
-  const modelPkArgs = parseKeyArgs(modelPk.directives.key.key);
-  const modelSkArgs = parseKeyArgs(modelSk.directives.key.key);
+  const modelPkArgs = parseKeyArgs(modelPk?.directives?.key?.key);
+  const modelSkArgs = parseKeyArgs(modelSk?.directives?.key?.key);
   const fields = [...new Set([...pkArgs, ...skArgs])];
   const modelFields = [...new Set([...modelPkArgs, ...modelSkArgs])];
 

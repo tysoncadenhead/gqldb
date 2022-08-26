@@ -25,6 +25,9 @@ ${Object.keys(relationships[current].fields)
     const hasManyMap = directives.hasMany
       ? getKeysForRelationship(directives.hasMany, models[type])
       : {};
+    const mapManyMap = directives.mapMany
+      ? getKeysForRelationship(directives.mapMany, models[type])
+      : {};
 
     return Object.keys(belongToMap).length
       ? `  ${item}: async () => {
@@ -42,6 +45,18 @@ ${Object.keys(relationships[current].fields)
           })
           .map((hasManyKey) => {
             return `${hasManyMap[hasManyKey]}: data.${hasManyKey}`;
+          })
+          .join(`, `)} });
+    return result.items;
+  },`
+      : Object.keys(mapManyMap).length
+      ? `  ${item}: async () => {
+    const result = await ${type}.query({ ${Object.keys(mapManyMap)
+          .filter((mapManyKey) => {
+            return !!mapManyMap[mapManyKey] && !!mapManyKey;
+          })
+          .map((mapManyKey) => {
+            return `${mapManyMap[mapManyKey]}: data.${mapManyKey}`;
           })
           .join(`, `)} });
     return result.items;

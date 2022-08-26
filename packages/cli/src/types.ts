@@ -24,6 +24,12 @@ export interface ISchemaJsonRelationship {
   sk: string;
 }
 
+export interface ISchemaJsonMapRelationship {
+  pk: string;
+  sk: string;
+  map: string;
+}
+
 interface ISchemaJsonFieldDirectives {
   key?: {
     key: string;
@@ -32,6 +38,7 @@ interface ISchemaJsonFieldDirectives {
   uuid?: {};
   belongsTo?: ISchemaJsonRelationship;
   hasMany?: ISchemaJsonRelationship;
+  mapMany?: ISchemaJsonMapRelationship;
   constraint?: {
     min?: number;
     max?: number;

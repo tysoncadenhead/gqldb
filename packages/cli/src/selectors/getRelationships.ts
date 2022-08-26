@@ -10,7 +10,11 @@ export const getRelationships = (json: ISchemaJson): ISchemaJson => {
           .filter((currentField) => {
             const fieldDirectives =
               json[current].fields[currentField].directives;
-            return !!fieldDirectives?.hasMany || !!fieldDirectives?.belongsTo;
+            return (
+              !!fieldDirectives?.hasMany ||
+              !!fieldDirectives?.mapMany ||
+              !!fieldDirectives?.belongsTo
+            );
           })
           .reduce((prevField, currentField) => {
             const field = json[current].fields[currentField];

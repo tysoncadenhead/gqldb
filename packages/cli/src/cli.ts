@@ -9,9 +9,9 @@ const cli = async () => {
   if (!fs.existsSync(`${currentDirectory}/gqldb.graphql`)) {
     fs.writeFileSync(
       `${currentDirectory}/gqldb.graphql`,
-      `pk: String! @key(key: "Person", type: "pk")
-sk: String! @key(key: "id:{{id}}", type: "sk")
-type Person @model {
+      `type Person @model {
+  pk: String! @key(key: "Person", type: "pk")
+  sk: String! @key(key: "id:{{id}}", type: "sk")
   id: ID! @uuid
   firstName: String!
   lastName: String!

@@ -1,6 +1,6 @@
 {
     "name": "graphqldb-cli",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "The CLI for graphqldb",
     "main": "lib/index.js",
     "scripts": {

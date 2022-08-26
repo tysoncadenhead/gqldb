@@ -1,4 +1,4 @@
-export const relationshipTypes = ['hasMany', 'belongsTo'];
+export const relationshipTypes = ['hasMany', 'belongsTo', 'mapMany'];
 export const typeMap = {
   String: 'string',
   Int: 'number',

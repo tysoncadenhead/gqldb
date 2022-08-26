@@ -42,6 +42,9 @@ export const getResolvers = (resolverOptions?: IGetResolvers) => {
       const hasManyMap = directives.hasMany
         ? getKeysForRelationship(directives.hasMany, models[type])
         : {};
+      const mapManyMap = directives.mapMany
+        ? getKeysForRelationship(directives.mapMany, models[type])
+        : {};
 
       return `    ${item}: wrap("${current}.${item}", [Permissions["${toCamelCase(
         type,
@@ -62,6 +65,16 @@ export const getResolvers = (resolverOptions?: IGetResolvers) => {
                 hasManyMap,
               ).reduce((prev, key) => {
                 return `${prev} ${key}: ctx.${hasManyMap[key]}`;
+              }, '')}});
+        return result.items;`
+            : ''
+        }
+        ${
+          Object.keys(mapManyMap).length
+            ? `const result = await ${type}.query({${Object.keys(
+                mapManyMap,
+              ).reduce((prev, key) => {
+                return `${prev} ${key}: ctx.${mapManyMap[key]}`;
               }, '')}});
         return result.items;`
             : ''
